@@ -42,7 +42,7 @@ func (c *config) GetDbPort() string {
 }
 
 func (c *config) GetDbSslMode () string {
-	return os.Getenv("disable")
+	return os.Getenv("DB_SSL")
 }
 
 func NewConfigInstance(envFile string) ConfigI {

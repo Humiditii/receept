@@ -5,6 +5,8 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/Humiditii/receept/internal/auth"
+	"github.com/Humiditii/receept/internal/auth/model"
 	"github.com/Humiditii/receept/internal/config"
 	"github.com/Humiditii/receept/internal/database"
 	"github.com/gin-gonic/gin"
@@ -16,7 +18,7 @@ func main(){
 
 	config := config.NewConfigInstance(".env")
 
-	dbInstance := database.NewDatabase(config)
+	dbInstance := database.NewDatabase(config, &model.User{})
 
 	defer dbInstance.CloseDBInstance()
 
@@ -27,6 +29,8 @@ func main(){
 			"message":"welcome to receept",
 		})
 	})
+
+	auth.RegisterAuthModule(dbInstance.Conn, server)
 
 	server.Run(":"+config.GetPort())
 }
