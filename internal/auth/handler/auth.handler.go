@@ -5,6 +5,7 @@ import (
 
 	"github.com/Humiditii/receept/internal/auth/model"
 	"github.com/Humiditii/receept/internal/auth/service"
+	"github.com/Humiditii/receept/pkg/utils"
 	"github.com/gin-gonic/gin"
 )
 
@@ -29,20 +30,16 @@ func (a *authHandler) Signup (ctx *gin.Context) {
 	var user model.User
 
 	if err := ctx.ShouldBindBodyWithJSON(&user); err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{
-			"message":err.Error(),
-			"error": true,
-		})
+		
+		utils.Send(ctx, http.StatusBadRequest, err.Error(), nil, true)
+
 		return
 	}
 
 	result, err := (*a.authService).Signup(&user)
 
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{
-			"message":err.Error(),
-			"error": true,
-		})
+		utils.Send(ctx, http.StatusBadRequest, err.Error(), nil, true)
 		return
 	}
 
@@ -50,4 +47,6 @@ func (a *authHandler) Signup (ctx *gin.Context) {
 		"message":"user created!",
 		"data": result,
 	})
+
+	utils.Send(ctx, http.StatusCreated, "New user created", nil, false)
 }

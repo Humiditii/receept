@@ -19,6 +19,6 @@ type User struct {
 	Phone       string    `json:"phone" gorm:"uniqueIndex;not null"`
 	AccountType UserType  `json:"account_type" gorm:"type:varchar(20);not null"`
 	Verified    bool      `json:"verified" gorm:"default:false"`
-	CreatedAt   time.Time `json:"created_at"`
-	UpdatedAt   time.Time `json:"updated_at"`
+	CreatedAt   time.Time `json:"createdAt"`
+	UpdatedAt   time.Time `json:"updatedAt"`
 }
