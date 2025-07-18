@@ -15,11 +15,11 @@ type Database interface {
 }
 
 type database struct {
-	conn *gorm.DB
+	Conn *gorm.DB
 }
 
 func (d *database) CloseDBInstance() {
-	db, _ := d.conn.DB()
+	db, _ := d.Conn.DB()
 
 	log.Println("Database connection closing... at:->", time.Now())
 
@@ -51,6 +51,6 @@ func NewDatabase(config config.ConfigI, models ...interface{}) *database {
 	}
 
 	return &database{
-		conn: db,
+		Conn: db,
 	}
 }
