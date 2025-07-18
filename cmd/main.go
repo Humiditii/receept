@@ -37,6 +37,6 @@ func main(){
 
 
 func fileLogging(){
-	f, _ := os.Create("app.log")
+	f, _ := os.Create("receept.log")
 	gin.DefaultWriter = io.MultiWriter(f, os.Stdout)
 }

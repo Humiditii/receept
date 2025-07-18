@@ -20,6 +20,7 @@ func NewAuthService (authRepo *repository.AuthRepository) AuthService {
 }
 
 func (as *authService) Signup(user *model.User) (*model.User, error) {
+	(*user).Verified = false
 	result, err := (*as.authRepo).Create(user)
 
 	if err != nil {
