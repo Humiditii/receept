@@ -1,7 +1,7 @@
 package service
 
 import (
-	"fmt"
+	"log"
 
 	"github.com/Humiditii/receept/internal/auth/model"
 	"github.com/Humiditii/receept/internal/auth/repository"
@@ -24,19 +24,36 @@ func NewAuthService (authRepo *repository.AuthRepository, emailService *email.Em
 	}
 }
 
-func (as *authService) Signup(user *model.User) (*model.User, error) {
-	(*user).Verified = false
-	result, err := (*as.authRepo).Create(user)
+// func (as *authService) Signup(user *model.User) (*model.User, error) {
+// 	(*user).Verified = false
+// 	result, err := (*as.authRepo).Create(user)
 
+// 	if err != nil {
+// 		return nil, err
+// 	}
+
+// 	welcomeMail := email.WelcomeMail(&user.Firstname)
+// 	if err:= as.emailService.Send(user.Email,welcomeMail.Subject,welcomeMail.Body); err != nil{
+// 		return nil, err
+// 	}
+
+// 	return result, nil
+// }
+
+func (as *authService) Signup(user *model.User) (*model.User, error) {
+	user.Verified = false
+	result, err := (*as.authRepo).Create(user)
 	if err != nil {
 		return nil, err
 	}
 
-	subject := "Welcome to Receept!!!"
-	body := fmt.Sprintf("Hey %s, welcome to our app, we are happy to have you onboard", user.Firstname)
-	if err:= as.emailService.Send(user.Email,subject,body); err != nil{
-		return nil, err
-	}
+	// Async email sending
+	go func(to string, name string) {
+		welcomeMail := email.WelcomeMail(&name)
+		if err := as.emailService.Send(to, welcomeMail.Subject, welcomeMail.Body); err != nil {
+			log.Printf("failed to send welcome email: %v\n", err)
+		}
+	}(user.Email, user.Firstname)
 
 	return result, nil
 }
