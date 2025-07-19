@@ -30,9 +30,9 @@ func main(){
 		})
 	})
 
-	auth.RegisterAuthModule(dbInstance.Conn, server)
+	auth.RegisterAuthModule(dbInstance.Conn, server, config)
 
-	server.Run(":"+config.GetPort())
+	server.Run(":"+(*config).AppPort)
 }
 
 
