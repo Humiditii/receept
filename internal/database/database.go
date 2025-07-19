@@ -26,9 +26,9 @@ func (d *database) CloseDBInstance() {
 	db.Close()
 }
 
-func NewDatabase(config config.ConfigI, models ...interface{}) *database {
+func NewDatabase(config *config.AppConfig, models ...interface{}) *database {
 
-	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=%s", config.GetDbHost(), config.GetDbUser(), config.GetDbPassword(), config.GetDbName(), config.GetDbPort(), config.GetDbSslMode())
+	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=%s", (*config).DbHost, (*config).DbUser, (*config).DbPassword, (*config).DbName, (*config).DbPort, (*config).DbSSLMode)
 
 	fmt.Println(dsn)
 

@@ -6,50 +6,40 @@ import (
 	"github.com/joho/godotenv"
 )
 
-
-type ConfigI interface {
-	GetPort() string
-	GetDbHost() string
-	GetDbUser() string
-	GetDbPassword() string
-	GetDbName() string
-	GetDbPort() string
-	GetDbSslMode() string
+type AppConfig struct {
+	AppPort       string
+	AppHost       string
+	DbHost        string
+	DbUser        string
+	DbPassword    string
+	DbName        string
+	DbPort        string
+	DbSSLMode     string
+	EmailHost     string
+	EmailPort     string
+	EmailUsername string
+	EmailPassword string
 }
 
-type config struct {
 
-}
 
-func (c *config) GetPort() string {
-	return os.Getenv("PORT")
-}
-
-func (c *config) GetDbHost() string {
-	return os.Getenv("DB_HOST")
-}
-func (c *config) GetDbUser() string {
-	return os.Getenv("DB_USER")
-}
-func (c *config) GetDbPassword() string {
-	return os.Getenv("DB_PASSWORD")
-}
-func (c *config) GetDbName() string {
-	return os.Getenv("DB_NAME")
-}
-func (c *config) GetDbPort() string {
-	return os.Getenv("DB_PORT")
-}
-
-func (c *config) GetDbSslMode () string {
-	return os.Getenv("DB_SSL")
-}
-
-func NewConfigInstance(envFile string) ConfigI {
-	
-	if err:= godotenv.Load(envFile); err != nil {
-		panic(err.Error())
+func NewConfigInstance(envFile string) *AppConfig {
+	if err := godotenv.Load(envFile); err != nil {
+		panic("Error loading env file: " + err.Error())
 	}
-	
-	return &config{}
+
+	return &AppConfig{
+		AppPort:       os.Getenv("PORT"),
+		AppHost:       os.Getenv("APP_HOST"),
+		DbHost:        os.Getenv("DB_HOST"),
+		DbUser:        os.Getenv("DB_USER"),
+		DbPassword:    os.Getenv("DB_PASSWORD"),
+		DbName:        os.Getenv("DB_NAME"),
+		DbPort:        os.Getenv("DB_PORT"),
+		DbSSLMode:     os.Getenv("DB_SSL"),
+		EmailHost:     os.Getenv("EMAIL_HOST"),
+		EmailPort:     os.Getenv("EMAIL_PORT"),
+		EmailUsername: os.Getenv("EMAIL_USERNAME"),
+		EmailPassword: os.Getenv("EMAIL_PASSWORD"),
+	}
 }
